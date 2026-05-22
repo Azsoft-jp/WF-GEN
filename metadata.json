@@ -1,0 +1,6 @@
+{
+  "name": "Waveform-Gen",
+  "description": "Generate stylish waveform videos locally in your browser.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

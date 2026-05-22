@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "Waveform-Gen",
+    "slug": "waveform-gen",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0c0c0e",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.waveformgen.app"
+    },
+    "android": {
+      "package": "com.waveformgen.app"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "YOUR_EAS_PROJECT_ID"
+      }
+    }
+  }
+}
