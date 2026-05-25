@@ -10,8 +10,12 @@
 今回うちらが**Google AI Studio**を使って爆誕させたのが、この「**Waveform Generator**」！🔥  
 普通にパブリック公開してるから、スマホでもPCでもガンガン使ってみてほしい！
 
-👉 **[Waveform Generatorを今すぐ使う！(https://waveform-gen.nulltan.dev/)](https://waveform-gen.nulltan.dev/)**
+👉 **[Waveform Generatorを今すぐ使う！](https://waveform-gen.nulltan.dev/)**
 もう独自ドメインも取っちゃったし、ガチで運用していくスタイル卍
+
+しかも！「コードどうなってんの？」って気になるエンジニア君たちのために、**GitHubリポジトリも完全公開しちゃいました！✨**
+👉 **[GitHubでソースコードをチェックする！](https://github.com/Azsoft-jp/WF-GEN)**
+スター（星🌟）押してくれたら、うちマジで嬉しすぎて泣いちゃうかも🥺💖
 
 **「好きな画像」**と**「音声ファイル（MP3とか）」**を入れるだけで、音楽に合わせて波形がウネウネ動く **1枚絵の動画（MP4）** が作れちゃう超神ツールだよ！✨
 
@@ -122,7 +126,8 @@ sequenceDiagram
 
 エンジニアの君も、プログラミング初心者で「なんかアプリ作りたいなー」って思ってる君も、**とりまAI Studio使ってみるしかないっしょ！🔥**
 
-ぜひうちらが作ったツールも遊んでみてね！
-👉 **[Waveform Generatorで遊ぶ！(https://waveform-gen.nulltan.dev/)](https://waveform-gen.nulltan.dev/)**
+ぜひうちらが作ったツールとコードでいっぱい遊んでみてね！
+👉 **[Waveform Generatorで遊ぶ！](https://waveform-gen.nulltan.dev/)**
+👉 **[GitHubリポジトリ（ソースコード）はこちら！](https://github.com/Azsoft-jp/WF-GEN)**
 
-記事読んでくれてありがとー！よかったら「LGTM（いいね）」押してってね！じゃーね！✌️💖✨
+記事読んでくれてありがとー！よかったらQiitaの「LGTM（いいね）」とGitHubの「Star（星🌟）」をダブルでポチッとしてくれたら超ハッピー！じゃーね！✌️💖✨
