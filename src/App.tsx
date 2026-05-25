@@ -2,7 +2,217 @@ import { useEffect, useRef, useState } from 'react';
 import { Play, Download, Settings, Loader2, StopCircle, Image as ImageIcon, Music, Pause } from 'lucide-react';
 import { RenderSettings, WorkerRequest, WorkerResponse } from './types';
 
+const LANGUAGES = {
+  en: {
+    title: 'WaveformGen',
+    mediaAssets: 'Media Assets',
+    backgroundImage: 'Background Image',
+    audioTrack: 'Audio Track',
+    canvasSettings: 'Canvas Settings',
+    resolution: 'Resolution',
+    fps: 'FPS',
+    bgMode: 'BG Mode',
+    bgColor: 'BG Color',
+    waveformStyle: 'Waveform Style',
+    position: 'Position',
+    waveformColor: 'Waveform Color',
+    awaitingArtwork: 'Awaiting Artwork',
+    cancelOutput: 'Cancel Output',
+    exportMp4: 'Export MP4',
+    renderComplete: 'Render Complete',
+    resultReady: 'Result Ready',
+    downloadMp4: 'Download MP4',
+    statusLabel: 'Status',
+    statusIdle: 'Idle',
+    statusRendering: 'Rendering',
+    bgModeBlur: 'Blur',
+    bgModeCrop: 'Crop (Cover)',
+    bgModeSolid: 'Solid Color',
+    wfTypeLine: 'Line',
+    wfTypeMirror: 'Mirror Line',
+    wfTypeStep: 'Step',
+    wfTypeBar: 'Bar',
+    wfTypeDot: 'Dot',
+    wfTypeFill: 'Fill',
+    wfTypeCircle: 'Circle',
+    wfTypeRadial: 'Radial Bars',
+    posTop: 'Top',
+    posCenter: 'Center',
+    posBottom: 'Bottom',
+    webcodecsOk: 'WEBCODECS: OK'
+  },
+  ja: {
+    title: 'WaveformGen',
+    mediaAssets: 'メディア素材',
+    backgroundImage: '背景画像',
+    audioTrack: 'オーディオトラック',
+    canvasSettings: 'キャンバス設定',
+    resolution: '解像度',
+    fps: 'FPS',
+    bgMode: '背景モード',
+    bgColor: '背景色',
+    waveformStyle: '波形スタイル',
+    position: '配置位置',
+    waveformColor: '波形カラー',
+    awaitingArtwork: 'アートワーク待機中',
+    cancelOutput: '出力をキャンセル',
+    exportMp4: 'MP4出力',
+    renderComplete: 'レンダリング完了',
+    resultReady: '動画が完成しました！',
+    downloadMp4: 'MP4をダウンロード',
+    statusLabel: 'ステータス',
+    statusIdle: '待機中',
+    statusRendering: 'レンダリング中',
+    bgModeBlur: 'ぼかし',
+    bgModeCrop: 'クロップ (カバー)',
+    bgModeSolid: '単色カラー',
+    wfTypeLine: 'ライン',
+    wfTypeMirror: 'ミラーライン',
+    wfTypeStep: 'ステップ',
+    wfTypeBar: 'バー',
+    wfTypeDot: 'ドット',
+    wfTypeFill: '塗りつぶし',
+    wfTypeCircle: 'サークル',
+    wfTypeRadial: 'ラジアルバー',
+    posTop: '上部',
+    posCenter: '中央',
+    posBottom: '下部',
+    webcodecsOk: 'WEBCODECS: OK'
+  },
+  ko: {
+    title: 'WaveformGen',
+    mediaAssets: '미디어 에셋',
+    backgroundImage: '배경 이미지',
+    audioTrack: '오디오 트랙',
+    canvasSettings: '캔버스 설정',
+    resolution: '해상도',
+    fps: 'FPS',
+    bgMode: '배경 모드',
+    bgColor: '배경 색상',
+    waveformStyle: '파형 스타일',
+    position: '파형 위치',
+    waveformColor: '파형 색상',
+    awaitingArtwork: '아트워크 대기 중',
+    cancelOutput: '출력 취소',
+    exportMp4: 'MP4 내보내기',
+    renderComplete: '렌더링 완료',
+    resultReady: '비디오가 완성되었습니다!',
+    downloadMp4: 'MP4 다운로드',
+    statusLabel: '상태',
+    statusIdle: '대기 중',
+    statusRendering: '렌더링 중',
+    bgModeBlur: '블러',
+    bgModeCrop: '크롭 (커버)',
+    bgModeSolid: '단색 색상',
+    wfTypeLine: '라인',
+    wfTypeMirror: '미러 라인',
+    wfTypeStep: '스텝',
+    wfTypeBar: '막대형',
+    wfTypeDot: '도트',
+    wfTypeFill: '채우기',
+    wfTypeCircle: '원형',
+    wfTypeRadial: '방사형 막대',
+    posTop: '상단',
+    posCenter: '중앙',
+    posBottom: '하단',
+    webcodecsOk: 'WEBCODECS: 지원됨'
+  },
+  zh: {
+    title: 'WaveformGen',
+    mediaAssets: '媒体资源',
+    backgroundImage: '背景图片',
+    audioTrack: '音频轨道',
+    canvasSettings: '画布设置',
+    resolution: '分辨率',
+    fps: '帧率 (FPS)',
+    bgMode: '背景模式',
+    bgColor: '背景颜色',
+    waveformStyle: '波形样式',
+    position: '波形位置',
+    waveformColor: '波形颜色',
+    awaitingArtwork: '等待上传图片',
+    cancelOutput: '取消导出',
+    exportMp4: '导出 MP4',
+    renderComplete: '渲染完成',
+    resultReady: '视频已生成！',
+    downloadMp4: '下载 MP4',
+    statusLabel: '状态',
+    statusIdle: '空闲',
+    statusRendering: '正在渲染',
+    bgModeBlur: '模糊',
+    bgModeCrop: '裁剪 (填充)',
+    bgModeSolid: '纯色',
+    wfTypeLine: '线条',
+    wfTypeMirror: '镜像线条',
+    wfTypeStep: '阶梯',
+    wfTypeBar: '柱状图',
+    wfTypeDot: '点状',
+    wfTypeFill: '填充',
+    wfTypeCircle: '圆环',
+    wfTypeRadial: '放射柱状',
+    posTop: '顶部',
+    posCenter: '居中',
+    posBottom: '底部',
+    webcodecsOk: 'WEBCODECS: 正常'
+  },
+  ru: {
+    title: 'WaveformGen',
+    mediaAssets: 'Медиафайлы',
+    backgroundImage: 'Фоновое изображение',
+    audioTrack: 'Аудиодорожка',
+    canvasSettings: 'Настройки холста',
+    resolution: 'Разрешение',
+    fps: 'FPS (Кадры/с)',
+    bgMode: 'Режим фона',
+    bgColor: 'Цвет фона',
+    waveformStyle: 'Стиль волны',
+    position: 'Позиция волны',
+    waveformColor: 'Цвет волны',
+    awaitingArtwork: 'Ожидание изображения',
+    cancelOutput: 'Отменить рендеринг',
+    exportMp4: 'Экспорт в MP4',
+    renderComplete: 'Рендеринг завершен',
+    resultReady: 'Видео готово к скачиванию!',
+    downloadMp4: 'Скачать MP4',
+    statusLabel: 'Статус',
+    statusIdle: 'Ожидание',
+    statusRendering: 'Рендеринг',
+    bgModeBlur: 'Размытие',
+    bgModeCrop: 'Обрезать (Заполнение)',
+    bgModeSolid: 'Сплошной цвет',
+    wfTypeLine: 'Линия',
+    wfTypeMirror: 'Зеркальная линия',
+    wfTypeStep: 'Ступеньки',
+    wfTypeBar: 'Столбцы',
+    wfTypeDot: 'Точки',
+    wfTypeFill: 'Заливка',
+    wfTypeCircle: 'Круг',
+    wfTypeRadial: 'Радиальные столбцы',
+    posTop: 'Сверху',
+    posCenter: 'По центру',
+    posBottom: 'Снизу',
+    webcodecsOk: 'WEBCODECS: OK'
+  }
+};
+
+type LangKey = 'en' | 'ja' | 'ko' | 'zh' | 'ru';
+
 export default function App() {
+  const [lang, setLang] = useState<LangKey>('en');
+
+  useEffect(() => {
+    const browserLang = navigator.language.split('-')[0];
+    if (['ja', 'ko', 'zh', 'ru', 'en'].includes(browserLang)) {
+      setLang(browserLang as LangKey);
+    } else {
+      setLang('en');
+    }
+  }, []);
+
+  const t = (key: keyof typeof LANGUAGES['en']) => {
+    return LANGUAGES[lang][key] || LANGUAGES['en'][key];
+  };
+
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [imageObjectUrl, setImageObjectUrl] = useState<string | null>(null);
@@ -292,6 +502,19 @@ export default function App() {
           </div>
           <span className="text-lg font-medium tracking-tight text-white">Waveform<span className="font-light opacity-60">Gen</span></span>
         </div>
+        <div className="flex items-center gap-2">
+          <select
+            value={lang}
+            onChange={(e) => setLang(e.target.value as LangKey)}
+            className="bg-white/5 hover:bg-white/10 border border-white/10 rounded-md px-2.5 py-1.5 text-xs text-white outline-none cursor-pointer font-medium"
+          >
+            <option value="en" className="bg-[#121214]">🇺🇸 English</option>
+            <option value="ja" className="bg-[#121214]">🇯🇵 日本語</option>
+            <option value="ko" className="bg-[#121214]">🇰🇷 한국어</option>
+            <option value="zh" className="bg-[#121214]">🇨🇳 简体中文</option>
+            <option value="ru" className="bg-[#121214]">🇷🇺 Русский</option>
+          </select>
+        </div>
       </nav>
 
       <main className="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden">
@@ -299,11 +522,11 @@ export default function App() {
           
           <div className="mb-8">
             <label className="text-[10px] uppercase tracking-[0.2em] text-[#f27d26] font-bold mb-4 flex items-center gap-2">
-              <ImageIcon className="w-4 h-4" /> Media Assets
+              <ImageIcon className="w-4 h-4" /> {t('mediaAssets')}
             </label>
             <div className="space-y-4">
               <div className="p-3 bg-white/5 border border-dashed border-white/20 rounded-lg">
-                <label className="block text-[10px] uppercase tracking-[0.2em] opacity-50 mb-2">Background Image</label>
+                <label className="block text-[10px] uppercase tracking-[0.2em] opacity-50 mb-2">{t('backgroundImage')}</label>
                 <input 
                   type="file" accept="image/*"
                   disabled={isGenerating}
@@ -317,7 +540,7 @@ export default function App() {
                 />
               </div>
               <div className="p-3 bg-white/5 border border-dashed border-white/20 rounded-lg">
-                <label className="block text-[10px] uppercase tracking-[0.2em] opacity-50 mb-2">Audio Track</label>
+                <label className="block text-[10px] uppercase tracking-[0.2em] opacity-50 mb-2">{t('audioTrack')}</label>
                 <input 
                   type="file" accept="audio/*"
                   disabled={isGenerating}
@@ -336,13 +559,13 @@ export default function App() {
           <div className="space-y-6">
             <div>
               <label className="text-[10px] uppercase tracking-[0.2em] text-[#f27d26] font-bold mb-4 flex items-center gap-2">
-                <Settings className="w-4 h-4" /> Canvas Settings
+                <Settings className="w-4 h-4" /> {t('canvasSettings')}
               </label>
 
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[10px] uppercase tracking-[0.2em] opacity-50 mb-2">Resolution</label>
+                    <label className="block text-[10px] uppercase tracking-[0.2em] opacity-50 mb-2">{t('resolution')}</label>
                     <select
                       disabled={isGenerating}
                       value={settings.resolution}
@@ -357,7 +580,7 @@ export default function App() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[10px] uppercase tracking-[0.2em] opacity-50 mb-2">FPS</label>
+                    <label className="block text-[10px] uppercase tracking-[0.2em] opacity-50 mb-2">{t('fps')}</label>
                     <input
                       type="number"
                       disabled={isGenerating}
@@ -370,21 +593,21 @@ export default function App() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                     <label className="block text-[10px] uppercase tracking-[0.2em] opacity-50 mb-2">BG Mode</label>
+                     <label className="block text-[10px] uppercase tracking-[0.2em] opacity-50 mb-2">{t('bgMode')}</label>
                      <select
                       disabled={isGenerating}
                       value={settings.backgroundMode}
                       onChange={e => setSettings({...settings, backgroundMode: e.target.value as any})}
                       className="w-full bg-white/5 border border-white/10 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#f27d26] outline-none"
                     >
-                      <option value="blur" className="bg-[#121214]">Blur</option>
-                      <option value="crop" className="bg-[#121214]">Crop (Cover)</option>
-                      <option value="solid" className="bg-[#121214]">Solid Color</option>
+                      <option value="blur" className="bg-[#121214]">{t('bgModeBlur')}</option>
+                      <option value="crop" className="bg-[#121214]">{t('bgModeCrop')}</option>
+                      <option value="solid" className="bg-[#121214]">{t('bgModeSolid')}</option>
                     </select>
                   </div>
                   {settings.backgroundMode === 'solid' && (
                     <div>
-                      <label className="block text-[10px] uppercase tracking-[0.2em] opacity-50 mb-2">BG Color</label>
+                      <label className="block text-[10px] uppercase tracking-[0.2em] opacity-50 mb-2">{t('bgColor')}</label>
                       <input
                         type="color"
                         disabled={isGenerating}
@@ -399,40 +622,40 @@ export default function App() {
                 <hr className="border-white/5" />
 
                 <div>
-                   <label className="block text-[10px] uppercase tracking-[0.2em] opacity-50 mb-2">Waveform Style</label>
+                   <label className="block text-[10px] uppercase tracking-[0.2em] opacity-50 mb-2">{t('waveformStyle')}</label>
                    <select
                     disabled={isGenerating}
                     value={settings.waveformType}
                     onChange={e => setSettings({...settings, waveformType: e.target.value as any})}
                     className="w-full bg-white/5 border border-white/10 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#f27d26] outline-none"
                   >
-                    <option value="line" className="bg-[#121214]">Line</option>
-                    <option value="mirror-line" className="bg-[#121214]">Mirror Line</option>
-                    <option value="step" className="bg-[#121214]">Step</option>
-                    <option value="bar" className="bg-[#121214]">Bar</option>
-                    <option value="dot" className="bg-[#121214]">Dot</option>
-                    <option value="fill" className="bg-[#121214]">Fill</option>
-                    <option value="circle" className="bg-[#121214]">Circle</option>
-                    <option value="radial-bars" className="bg-[#121214]">Radial Bars</option>
+                    <option value="line" className="bg-[#121214]">{t('wfTypeLine')}</option>
+                    <option value="mirror-line" className="bg-[#121214]">{t('wfTypeMirror')}</option>
+                    <option value="step" className="bg-[#121214]">{t('wfTypeStep')}</option>
+                    <option value="bar" className="bg-[#121214]">{t('wfTypeBar')}</option>
+                    <option value="dot" className="bg-[#121214]">{t('wfTypeDot')}</option>
+                    <option value="fill" className="bg-[#121214]">{t('wfTypeFill')}</option>
+                    <option value="circle" className="bg-[#121214]">{t('wfTypeCircle')}</option>
+                    <option value="radial-bars" className="bg-[#121214]">{t('wfTypeRadial')}</option>
                   </select>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[10px] uppercase tracking-[0.2em] opacity-50 mb-2">Position</label>
+                    <label className="block text-[10px] uppercase tracking-[0.2em] opacity-50 mb-2">{t('position')}</label>
                     <select
                       disabled={isGenerating || settings.waveformType === 'circle' || settings.waveformType === 'radial-bars'}
                       value={settings.waveformPosition}
                       onChange={e => setSettings({...settings, waveformPosition: e.target.value as any})}
                       className="w-full bg-white/5 border border-white/10 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#f27d26] outline-none disabled:opacity-30"
                     >
-                      <option value="top" className="bg-[#121214]">Top</option>
-                      <option value="center" className="bg-[#121214]">Center</option>
-                      <option value="bottom" className="bg-[#121214]">Bottom</option>
+                      <option value="top" className="bg-[#121214]">{t('posTop')}</option>
+                      <option value="center" className="bg-[#121214]">{t('posCenter')}</option>
+                      <option value="bottom" className="bg-[#121214]">{t('posBottom')}</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[10px] uppercase tracking-[0.2em] opacity-50 mb-2">Waveform Color</label>
+                    <label className="block text-[10px] uppercase tracking-[0.2em] opacity-50 mb-2">{t('waveformColor')}</label>
                     <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-md px-2 text-sm h-9">
                       <input
                         type="color"
@@ -467,7 +690,7 @@ export default function App() {
                {!imageFile && (
                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white/30 pointer-events-none z-20">
                     <ImageIcon className="w-12 h-12 mb-3 opacity-50" />
-                    <p className="font-medium tracking-wide">Awaiting Artwork</p>
+                    <p className="font-medium tracking-wide">{t('awaitingArtwork')}</p>
                  </div>
                )}
                {audioFile && !isGenerating && (
@@ -485,7 +708,7 @@ export default function App() {
                   onClick={handleCancel}
                   className="w-full sm:w-auto flex-shrink-0 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 text-white px-6 py-3 rounded-lg font-medium transition-colors"
                 >
-                  <StopCircle className="w-5 h-5" /> Cancel Output
+                  <StopCircle className="w-5 h-5" /> {t('cancelOutput')}
                 </button>
               ) : (
                 <button
@@ -493,7 +716,7 @@ export default function App() {
                   disabled={!canStart}
                   className="w-full sm:w-auto flex-shrink-0 flex items-center justify-center gap-2 bg-[#f27d26] hover:bg-[#d96a1a] disabled:bg-white/5 disabled:text-white/30 text-white px-8 py-3 rounded-lg font-medium transition-colors cursor-pointer disabled:cursor-not-allowed shadow-[0_0_15px_rgba(242,125,38,0.2)]"
                 >
-                  <Play className="w-5 h-5 fill-current" /> Export MP4
+                  <Play className="w-5 h-5 fill-current" /> {t('exportMp4')}
                 </button>
               )}
 
@@ -519,7 +742,7 @@ export default function App() {
                     <div className="text-red-400 text-sm font-medium">{errorMsg}</div>
                  )}
                  {!isGenerating && progressData.stage === 'done' && !errorMsg && (
-                    <div className="text-green-500 text-sm font-medium uppercase tracking-widest">Render Complete</div>
+                    <div className="text-green-500 text-sm font-medium uppercase tracking-widest">{t('renderComplete')}</div>
                  )}
               </div>
             </div>
@@ -527,7 +750,7 @@ export default function App() {
             {resultBlobUrl && (
               <div className="bg-[#121214] border border-[#f27d26]/20 rounded-2xl p-6 shadow-xl animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <h3 className="text-sm font-bold tracking-widest uppercase mb-4 text-[#f27d26] flex items-center gap-2">
-                  <Download className="w-4 h-4" /> Result Ready
+                  <Download className="w-4 h-4" /> {t('resultReady')}
                 </h3>
                 <video src={resultBlobUrl} controls className="w-full rounded-lg bg-black aspect-video mb-6 outline-none border border-white/10"></video>
                 <a
@@ -535,7 +758,7 @@ export default function App() {
                   download="waveform-output.mp4"
                   className="inline-flex items-center gap-2 bg-white text-black hover:bg-neutral-200 px-6 py-2.5 rounded-lg font-medium transition-colors"
                 >
-                  <Download className="w-4 h-4" /> Download MP4
+                  <Download className="w-4 h-4" /> {t('downloadMp4')}
                 </a>
               </div>
             )}
@@ -545,7 +768,7 @@ export default function App() {
 
       <footer className="px-6 py-3 bg-[#121214] border-t border-white/5 flex items-center gap-6 flex-shrink-0">
         <div className="text-[10px] font-mono uppercase tracking-widest text-[#f27d26]">
-          Status: {isGenerating ? 'Rendering' : 'Idle'}
+          {t('statusLabel')}: {isGenerating ? t('statusRendering') : t('statusIdle')}
         </div>
         <div className="flex-1 h-1 bg-white/5 rounded-full relative overflow-hidden">
           {isGenerating && (
@@ -553,7 +776,7 @@ export default function App() {
           )}
         </div>
         <div className="hidden sm:flex items-center gap-4 text-[10px] font-mono opacity-50">
-          <span>WEBCODECS: OK</span>
+          <span>{t('webcodecsOk')}</span>
         </div>
       </footer>
     </div>

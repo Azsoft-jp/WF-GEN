@@ -101,7 +101,7 @@ async function runJob(data: any) {
   outHeight = Math.floor(outHeight / 2) * 2;
 
   // Setup Muxer
-  const muxer = new Muxer({
+  const muxerOptions: any = {
     target: new ArrayBufferTarget(),
     video: {
       codec: 'avc',
@@ -115,7 +115,8 @@ async function runJob(data: any) {
     },
     fastStart: 'in-memory',
     firstTimestampMustBeZero: true
-  });
+  };
+  const muxer = new Muxer(muxerOptions);
 
   // Setup VideoEncoder
   let videoError: Error | null = null;
